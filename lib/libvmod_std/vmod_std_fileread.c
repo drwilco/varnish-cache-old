@@ -37,12 +37,7 @@
  * XXX: underlying file has been updated.
  */
 
-#include <fcntl.h>
-#include <pthread.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include "vrt.h"
 #include "../../bin/varnishd/cache.h"
 
@@ -92,7 +87,7 @@ vmod_fileread(struct sess *sp, struct vmod_priv *priv, const char *file_name)
 		CAST_OBJ_NOTNULL(frf, priv->priv, CACHED_FILE_MAGIC);
 		return (frf->contents);
 	}
-	
+
 	AZ(pthread_mutex_lock(&frmtx));
 	VTAILQ_FOREACH(frf, &frlist, list) {
 		if (!strcmp(file_name, frf->file_name)) {
@@ -101,8 +96,11 @@ vmod_fileread(struct sess *sp, struct vmod_priv *priv, const char *file_name)
 		}
 	}
 	AZ(pthread_mutex_unlock(&frmtx));
-	if (frf != NULL)
+	if (frf != NULL) {
+		priv->free = free_frfile;
+		priv->priv = frf;
 		return (frf->contents);
+	}
 
 	s = vreadfile(NULL, file_name, NULL);
 	if (s != NULL) {
