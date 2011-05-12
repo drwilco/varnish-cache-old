@@ -319,7 +319,8 @@ EmitInitFunc(const struct vcc *tl)
 static void
 EmitFiniFunc(const struct vcc *tl)
 {
-	unsigned u;
+	unsigned	u;
+	struct fini	*f;
 
 	Fc(tl, 0, "\nstatic void\nVGC_Fini(struct cli *cli)\n{\n\n");
 
@@ -329,6 +330,10 @@ EmitFiniFunc(const struct vcc *tl)
 	 */
 	for (u = 0; u < tl->nvmodpriv; u++)
 		Fc(tl, 0, "\tvmod_priv_fini(&vmod_priv_%u);\n", u);
+
+	VTAILQ_FOREACH(f, &tl->finis, list) {
+		vsb_printf(tl->fc, "%s", f->text);
+	}
 
 	AZ(vsb_finish(tl->ff));
 	vsb_cat(tl->fc, vsb_data(tl->ff));
@@ -498,10 +503,10 @@ vcc_NewVcc(const struct vcc *tl0)
 		tl->err_unref = 1;
 	}
 	VTAILQ_INIT(&tl->symbols);
-	VTAILQ_INIT(&tl->hosts);
 	VTAILQ_INIT(&tl->membits);
 	VTAILQ_INIT(&tl->tokens);
 	VTAILQ_INIT(&tl->sources);
+	VTAILQ_INIT(&tl->finis);
 
 	tl->nsources = 0;
 	tl->ndirector = 1;
