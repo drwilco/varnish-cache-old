@@ -1,4 +1,4 @@
-varnishtest "Destruction of stacked directors"
+test "Destruction of stacked directors"
 
 server s1 {
 	rxreq
@@ -100,7 +100,7 @@ varnish v1 -expect n_vcl == 2
 client c1 -run
 
 varnish v1 -cli "vcl.discard vcl1"
-
+delay 1
 varnish v1 -expect n_backend == 2
 varnish v1 -expect n_vcl == 1
 
@@ -124,7 +124,7 @@ varnish v1 -vcl+backend {
 	}
 
 	sub vcl_recv {
-		if (1 == 0) {
+		if (req.url == "junk") {
 			set req.backend = rr2;
 			return(pass);
 		} else {
@@ -136,12 +136,12 @@ varnish v1 -vcl+backend {
 }
 
 varnish v1 -expect n_backend == 2
-varnish v1 -expect n_vcl == 2
+#varnish v1 -expect n_vcl == 2
 
 client c1 -run
 
 varnish v1 -cli "vcl.discard vcl2"
-
+delay 1
 varnish v1 -cli "vcl.list"
 
 varnish v1 -expect n_backend == 2
