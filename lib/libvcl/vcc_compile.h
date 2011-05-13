@@ -61,13 +61,17 @@ struct token {
 	char			*dec;
 };
 
+struct fini {
+	VTAILQ_ENTRY(fini)	list;
+	char			*text;
+};
+
 VTAILQ_HEAD(tokenhead, token);
 
 struct tokenlist {
 	struct tokenhead	tokens;
 	VTAILQ_HEAD(, source)	sources;
 	VTAILQ_HEAD(, membit)	membits;
-	VTAILQ_HEAD(, host)	hosts;
 	unsigned		nsources;
 	struct source		*src;
 	struct token		*t;
@@ -79,6 +83,7 @@ struct tokenlist {
 	struct vsb		*fc, *fh, *fi, *ff, *fb;
 	struct vsb		*fm[VCL_MET_MAX];
 	VTAILQ_HEAD(, ref)	refs;
+	VTAILQ_HEAD(, fini)	finis;
 	struct vsb		*sb;
 	int			err;
 	int			ndirector;
@@ -237,6 +242,7 @@ void vcc_VarVal(struct tokenlist *tl, const struct var *vp,
     const struct token *vt);
 
 /* vcc_xref.c */
+struct ref *vcc_FindRef(struct tokenlist *tl, struct token *t, enum ref_type type);
 void vcc_AddDef(struct tokenlist *tl, struct token *t, enum ref_type type);
 void vcc_AddRef(struct tokenlist *tl, struct token *t, enum ref_type type);
 int vcc_CheckReferences(struct tokenlist *tl);

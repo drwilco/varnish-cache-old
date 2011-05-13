@@ -301,8 +301,14 @@ EmitInitFunc(const struct tokenlist *tl)
 static void
 EmitFiniFunc(const struct tokenlist *tl)
 {
+	struct fini	*f;
 
 	Fc(tl, 0, "\nstatic void\nVGC_Fini(struct cli *cli)\n{\n\n");
+
+	VTAILQ_FOREACH(f, &tl->finis, list) {
+		vsb_printf(tl->fc, "%s", f->text);
+	}
+
 	vsb_finish(tl->ff);
 	AZ(vsb_overflowed(tl->ff));
 	vsb_cat(tl->fc, vsb_data(tl->ff));
@@ -462,12 +468,12 @@ vcc_NewTokenList(void)
 
 	tl = calloc(sizeof *tl, 1);
 	assert(tl != NULL);
-	VTAILQ_INIT(&tl->hosts);
 	VTAILQ_INIT(&tl->membits);
 	VTAILQ_INIT(&tl->tokens);
 	VTAILQ_INIT(&tl->refs);
 	VTAILQ_INIT(&tl->procs);
 	VTAILQ_INIT(&tl->sources);
+	VTAILQ_INIT(&tl->finis);
 
 	tl->nsources = 0;
 	tl->ndirector = 1;

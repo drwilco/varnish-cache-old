@@ -118,6 +118,20 @@ vcc_findref(struct tokenlist *tl, struct token *t, enum ref_type type)
 	return (r);
 }
 
+struct ref *
+vcc_FindRef(struct tokenlist *tl, struct token *t, enum ref_type type)
+{
+	struct ref *r;
+
+	VTAILQ_FOREACH(r, &tl->refs, list) {
+		if (r->type != type)
+			continue;
+		if (vcc_Teq(r->name, t))
+			return (r);
+	}
+	return (r);
+}
+
 void
 vcc_AddRef(struct tokenlist *tl, struct token *t, enum ref_type type)
 {
