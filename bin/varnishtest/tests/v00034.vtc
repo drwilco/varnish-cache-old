@@ -32,7 +32,7 @@ varnish v1 -vcl+backend {
 		return(pass);
 	}
 
-} -cliok "param.set sess_timeout 60" -start
+} -start
 
 
 client c1 {
