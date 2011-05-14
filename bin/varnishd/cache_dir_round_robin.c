@@ -73,7 +73,7 @@ vdi_round_robin_getfd(const struct director *d, struct sess *sp)
 
 	/* 
 	 * In fallback mode we ignore the next_host and always grab the 
-         * first healthy backend we can find.
+	 * first healthy backend we can find.
 	 */
 	for (i = 0; i < vs->nhosts; i++) {
 		if (vs->mode == m_round_robin) {
