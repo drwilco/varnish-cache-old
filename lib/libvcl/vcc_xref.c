@@ -82,7 +82,14 @@ vcc_AddRef(struct vcc *tl, const struct token *t, enum symkind kind)
 {
 	struct symbol *sym;
 
-	sym = VCC_GetSymbolTok(tl, t, kind);
+	sym = VCC_FindSymbol(tl, t, kind);
+	if (sym == NULL) {
+		vsb_printf(tl->sb, "Undefined %s ", VCC_SymKindEnum(tl, kind));
+		vcc_ErrToken(tl, t);
+		vsb_printf(tl->sb, ", first reference:\n");
+		vcc_ErrWhere(tl, t);
+		return;
+	}
 	AN(sym);
 	sym->nref++;
 }

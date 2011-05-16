@@ -492,6 +492,7 @@ vcc_Eval_Backend(struct vcc *tl, struct expr **e, const struct symbol *sym)
 
 	vcc_ExpectCid(tl);
 	vcc_AddRef(tl, tl->t, SYM_BACKEND);
+	AZ(tl->err);
 	*e = vcc_mk_expr(BACKEND, "VGCDIR(_%.*s)", PF(tl->t));
 	vcc_NextToken(tl);
 }
@@ -948,6 +949,7 @@ vcc_expr_cmp(struct vcc *tl, struct expr **e, enum var_type fmt)
 		vcc_NextToken(tl);
 		ExpectErr(tl, ID);
 		vcc_AddRef(tl, tl->t, SYM_ACL);
+		ERRCHK(tl);
 		bprintf(buf, "%smatch_acl_named_%.*s(sp, \v1)", not, PF(tl->t));
 		vcc_NextToken(tl);
 		*e = vcc_expr_edit(BOOL, buf, *e, NULL);
@@ -963,6 +965,7 @@ vcc_expr_cmp(struct vcc *tl, struct expr **e, enum var_type fmt)
 		vcc_NextToken(tl);
 		ExpectErr(tl, ID);
 		vcc_AddRef(tl, tl->t, SYM_BACKEND);
+		ERRCHK(tl);
 		bprintf(buf, "(\v1 %.*s VGCDIR(_%.*s))", PF(tk), PF(tl->t));
 		vcc_NextToken(tl);
 		*e = vcc_expr_edit(BOOL, buf, *e, NULL);

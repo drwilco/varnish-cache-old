@@ -552,6 +552,7 @@ vcc_ParseHostDef(struct vcc *tl, int serial, const char *vgcname)
 		} else if (vcc_IdIs(t_field, "probe") && tl->t->tok == ID) {
 			Fb(tl, 0, "\t.probe = &vgc_probe_%.*s,\n", PF(tl->t));
 			vcc_AddRef(tl, tl->t, SYM_PROBE);
+			ERRCHK(tl);
 			vcc_NextToken(tl);
 			SkipToken(tl, ';');
 		} else if (vcc_IdIs(t_field, "probe")) {
@@ -643,6 +644,7 @@ vcc_ParseBackendHost(struct vcc *tl, int serial, char **nm)
 			return;
 		}
 		vcc_AddRef(tl, h->name, SYM_BACKEND);
+		ERRCHK(tl);
 		vcc_NextToken(tl);
 		SkipToken(tl, ';');
 		*nm = h->vgcname;

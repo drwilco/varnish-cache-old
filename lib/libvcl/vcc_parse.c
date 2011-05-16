@@ -206,6 +206,7 @@ vcc_Function(struct vcc *tl)
 		if (tl->mprocs[m] == NULL) {
 			vcc_AddDef(tl, tl->t, SYM_SUB);
 			vcc_AddRef(tl, tl->t, SYM_SUB);
+			AZ(tl->err);
 			tl->mprocs[m] = vcc_AddProc(tl, tl->t);
 		}
 		tl->curproc = tl->mprocs[m];

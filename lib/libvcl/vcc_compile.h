@@ -277,6 +277,7 @@ struct symbol *VCC_GetSymbolTok(struct vcc *tl, const struct token *tok,
     enum symkind);
 struct symbol *VCC_FindSymbol(struct vcc *tl,
     const struct token *t, enum symkind kind);
+const char * VCC_SymKindEnum(struct vcc *tl, enum symkind kind);
 const char * VCC_SymKind(struct vcc *tl, const struct symbol *s);
 typedef void symwalk_f(struct vcc *tl, const struct symbol *s);
 void VCC_WalkSymbols(struct vcc *tl, symwalk_f *func, enum symkind kind);

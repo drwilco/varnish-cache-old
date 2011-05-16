@@ -41,17 +41,23 @@
 /*--------------------------------------------------------------------*/
 
 const char *
-VCC_SymKind(struct vcc *tl, const struct symbol *s)
+VCC_SymKindEnum(struct vcc *tl, enum symkind kind)
 {
-	switch(s->kind) {
+	switch(kind) {
 #define VCC_SYMB(uu, ll, dd)	case SYM_##uu: return(dd);
 #include "symbol_kind.h"
 #undef VCC_SYMB
 	default:
 		ErrInternal(tl);
-		vsb_printf(tl->sb, "Symbol Kind 0x%x\n", s->kind);
+		vsb_printf(tl->sb, "Symbol Kind 0x%x\n", kind);
 		return("INTERNALERROR");
 	}
+}
+
+const char *
+VCC_SymKind(struct vcc *tl, const struct symbol *s)
+{
+	return VCC_SymKindEnum(tl, s->kind);
 }
 
 

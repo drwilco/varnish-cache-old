@@ -655,6 +655,7 @@ vcc_CompileSource(const struct vcc *tl0, struct vsb *sb, struct source *sp)
 	Fi(tl, 0, "\tVCL_conf.director[0] = VCL_conf.director[%d];\n",
 	    tl->defaultdir);
 	vcc_AddRef(tl, tl->t_defaultdir, SYM_BACKEND);
+	AZ(tl->err);
 
 	/* Check for orphans */
 	if (vcc_CheckReferences(tl))
