@@ -154,7 +154,7 @@ do_args(int sock, int argc, char * const *argv)
 	}
 	cli_write(sock, "\n");
 
-	(void)cli_readres(sock, &status, &answer, 2000);
+	(void)cli_readres(sock, &status, &answer, timeout);
 
 	/* XXX: AZ() ? */
 	(void)close(sock);
